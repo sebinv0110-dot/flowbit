@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>Admin Panel</h2>
+
+<button onclick="loadEmployees()">Load Employees</button>
+<button onclick="logout()">Logout</button>
+
+<div id="data"></div>
+
+<script>
+
+    const token = localStorage.getItem("token");
+
+    function loadEmployees() {
+        fetch("/api/employee/all", {
+            headers: { "Authorization": "Bearer " + token }
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            let html = "";
+
+            data.forEach(e => {
+                html += `
+                    <div>
+                        <b>${e.name}</b><br>
+                        Rating: <input id="r${e.id}" value="${e.rating}"><br>
+                        Tasks: <input id="t${e.id}" value="${e.tasksCompleted}"><br>
+                        Attendance: <input id="a${e.id}" value="${e.attendanceDays}"><br>
+
+                        <button onclick="update(${e.id})">Update</button>
+                        <hr>
+                    </div>
+                `;
+            });
+
+            document.getElementById("data").innerHTML = html;
+        });
+    }
+
+    function update(id) {
+
+        const data = {
+            rating: document.getElementById("r"+id).value,
+            tasksCompleted: document.getElementById("t"+id).value,
+            attendanceDays: document.getElementById("a"+id).value
+        };
+
+        fetch("/api/employee/update/" + id, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(data)
+        })
+        .then(() => alert("Updated!"));
+    }
+
+    function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "login.html";
+    }
+
+</script>
+
+</body>
+</html>

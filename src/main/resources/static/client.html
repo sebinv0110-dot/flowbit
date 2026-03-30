@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>Client Dashboard</h2>
+
+<button onclick="loadProjects()">My Projects</button>
+<button onclick="logout()">Logout</button>
+
+<div id="data"></div>
+
+<script>
+
+  const token = localStorage.getItem("token");
+
+  function loadProjects() {
+      fetch("/api/client/all", {
+          headers: { "Authorization": "Bearer " + token }
+      })
+      .then(res => res.json())
+      .then(data => {
+
+          let html = "";
+
+          data.forEach(c => {
+              html += `
+                  <div>
+                      <b>${c.name}</b><br>
+                      Project: ${c.projectDetails}<br>
+                      Status: ${c.status}<br>
+                      Payment: ₹${c.payment}<br>
+                      <hr>
+                  </div>
+              `;
+          });
+
+          document.getElementById("data").innerHTML = html;
+      });
+  }
+
+  function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "login.html";
+  }
+
+</script>
+
+</body>
+</html>

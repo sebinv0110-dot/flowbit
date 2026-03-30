@@ -1,0 +1,77 @@
+/* 🔥 GLOBAL STYLE */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 🔲 CARD CONTAINER */
+.card {
+    width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+/* 🏷 HEADINGS */
+h2 {
+    margin-bottom: 20px;
+}
+
+/* 📝 INPUTS */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* 🔘 BUTTON */
+button {
+    width: 95%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    background: #4facfe;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #007bff;
+}
+
+/* 📊 DATA SECTION */
+#data {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+    border-radius: 10px;
+}
+
+/* 📦 BOX */
+.box {
+    background: #f9f9f9;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+}
+
+/* 🔗 NAV BUTTONS */
+.nav {
+    text-align: center;
+    margin: 20px;
+}
+
+.nav button {
+    width: auto;
+    margin: 5px;
+}
