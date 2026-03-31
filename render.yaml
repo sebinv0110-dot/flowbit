@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: flowbitmvn clean package
-    runtime: java
-    buildCommand: mvn clean package
-    startCommand: java -jar target/flowbit.jar

@@ -5,61 +5,53 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
-
-    private final JwtFilter jwtFilter;
-
-    public SecurityConfig(JwtFilter jwtFilter) {
-        this.jwtFilter = jwtFilter;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
+                // Disable CSRF (for testing / APIs)
                 .csrf(csrf -> csrf.disable())
 
+                // Authorize requests
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-
-                                // 🔓 LOGIN & REGISTER (MUST BE OPEN)
-                                "/api/employee/login",
-                                "/api/employee/register",
-                                "/api/client/login",
-                                "/api/client/register",
-
-                                // 🔓 FRONTEND FILES
-                                "/login.html",
-                                "/dashboard.html",
-                                "/admin.html",
-                                "/client.html",
-
-                                // 🔓 STATIC FILES
-                                "/js/**",
+                                "/",
+                                "/login",
+                                "/register",
                                 "/css/**",
-                                "/images/**",
-                                "/"
-
+                                "/js/**",
+                                "/images/**"
                         ).permitAll()
-
-                        // 🔒 OTHER APIs NEED TOKEN
                         .anyRequest().authenticated()
                 )
 
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                // Login config
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/dashboard", true)
+                        .permitAll()
+                )
 
-                .formLogin(form -> form.disable())
-                .httpBasic(basic -> basic.disable());
+                // Logout config
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
+                );
+
         return http.build();
     }
 
+    // Password Encoder (VERY IMPORTANT)
     @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }
